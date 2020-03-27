@@ -1,4 +1,4 @@
-package com.ps;
+package com.ps.tasks;
 
 import java.util.List;
 

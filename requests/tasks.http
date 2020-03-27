@@ -2,7 +2,8 @@ POST localhost:9000
 Content-Type: application/json
 
 {
-    "title": "dokończyć lekcję"
+  "title": "dokończyć lekcję",
+  "author": "me"
 }
 
 ###
