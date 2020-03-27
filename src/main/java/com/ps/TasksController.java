@@ -1,10 +1,12 @@
 package com.ps;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/")
 public class TasksController {
@@ -18,11 +20,13 @@ public class TasksController {
 
     @GetMapping
     public List<Task> index() {
+        log.info("Fetching all tasks...");
         return tasksRepository.fetchAll();
     }
 
     @PostMapping
     public void addTask(@RequestBody Task task) {
+        log.info("Storing new tasks {}", task);
         tasksRepository.add(task);
     }
 }

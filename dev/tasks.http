@@ -6,3 +6,7 @@ Content-Type: application/json
 }
 
 ###
+
+GET localhost:9000
+
+###
