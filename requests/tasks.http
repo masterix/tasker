@@ -1,13 +1,22 @@
-POST localhost:9000
+POST localhost:9000/api/tasks
 Content-Type: application/json
 
 {
-  "title": "dokończyć lekcję",
-  "author": "me"
+  "id": 22,
+  "author": "me",
+  "title": "dokończyć lekcję"
 }
 
 ###
 
-GET localhost:9000
+GET localhost:9000/api/tasks
+
+###
+
+GET localhost:9000/api/tasks/222
+
+###
+
+DELETE localhost:9000/api/tasks/22
 
 ###

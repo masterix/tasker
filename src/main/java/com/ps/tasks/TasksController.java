@@ -8,7 +8,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/")
+@RequestMapping(path = "/api/tasks")
 public class TasksController {
 
     private final TasksRepository tasksRepository;
@@ -24,9 +24,22 @@ public class TasksController {
         return tasksRepository.fetchAll();
     }
 
+    @GetMapping(path = "/{id}")
+    public Task getTaskById(@PathVariable Long id) {
+        log.info("Fetching task by id: {}", id);
+
+        return tasksRepository.fetchById(id);
+    }
+
     @PostMapping
     public void addTask(@RequestBody Task task) {
         log.info("Storing new tasks {}", task);
         tasksRepository.add(task);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public void deleteTask(@PathVariable Long id) {
+        log.info("Deleting by id: {}", id);
+        tasksRepository.delete(id);
     }
 }
