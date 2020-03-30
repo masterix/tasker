@@ -1,5 +1,6 @@
-package com.ps.tasks;
+package com.ps.tasks.boundary;
 
+import com.ps.tasks.entity.Task;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

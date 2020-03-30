@@ -1,4 +1,6 @@
-package com.ps.tasks;
+package com.ps.tasks.boundary;
+
+import com.ps.tasks.entity.Task;
 
 import java.util.List;
 

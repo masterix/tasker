@@ -2,9 +2,8 @@ POST localhost:9000/api/tasks
 Content-Type: application/json
 
 {
-  "id": 22,
-  "author": "me",
-  "title": "dokończyć lekcję"
+  "title": "test test",
+  "description": "opis"
 }
 
 ###
