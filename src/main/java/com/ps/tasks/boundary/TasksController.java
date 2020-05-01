@@ -1,5 +1,6 @@
 package com.ps.tasks.boundary;
 
+import com.ps.Clock;
 import com.ps.tasks.control.TasksService;
 import com.ps.tasks.entity.Task;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +60,12 @@ public class TasksController {
     public void deleteTask(@PathVariable Long id) {
         log.info("Deleting by id: {}", id);
         tasksRepository.delete(id);
+    }
+
+    @PutMapping(path = "/{id}")
+    public void updateTask(@PathVariable Long id, @RequestBody UpdateTaskRequest updateTaskRequest) {
+        log.info("Updating a task {}", id);
+        tasksService.updateTask(id, updateTaskRequest.title, updateTaskRequest.description);
     }
 
     private TaskResponse transformToTaskResponse(Task task) {

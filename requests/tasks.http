@@ -19,3 +19,11 @@ GET localhost:9000/api/tasks/222
 DELETE localhost:9000/api/tasks/22
 
 ###
+
+PUT localhost:9000/api/tasks/0
+Content-Type: application/json
+
+{
+  "title": "test test",
+  "description": "opis"
+}

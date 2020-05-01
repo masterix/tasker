@@ -8,12 +8,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class Task {
-
     private Long id;
-
     private String title;
-
     private String description;
-
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 }
