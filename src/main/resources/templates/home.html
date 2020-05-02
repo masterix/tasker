@@ -20,8 +20,18 @@
         <td th:text="${task.title}"></td>
         <td th:text="${task.description}"></td>
         <td th:text="${task.createdAt}"></td>
+        <td>
+            <form action="#" th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
+<form action="#" th:object="${newTask}" th:action="@{/tasks}" method="post">
+    <input type="text" th:field="*{title}">
+    <textarea th:field="*{description}"></textarea>
+    <button type="submit">Add</button>
+</form>
 </body>
 </html>
