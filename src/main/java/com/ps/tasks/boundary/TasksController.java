@@ -131,7 +131,9 @@ public class TasksController {
 
     @PostMapping(path = "/{id}/attachments")
     public ResponseEntity<Object> addAttachment(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
-        storageService.saveFile(id, file);
+        String filename = storageService.saveFile(id, file);
+        tasksService.addAttachmentToTask(id, filename);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -140,7 +142,8 @@ public class TasksController {
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
-                task.getCreatedAt()
+                task.getCreatedAt(),
+                task.getAttachments()
         );
     }
 }

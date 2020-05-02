@@ -20,6 +20,6 @@ public class TaskerConfig {
 
     @Bean
     public StorageService storageService() {
-        return new FileSystemStorageService(Paths.get("/var/www/upload"));
+        return new FileSystemStorageService(Paths.get("/home/masterix/upload"));
     }
 }

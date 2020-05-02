@@ -5,7 +5,7 @@ import com.ps.tasks.boundary.TasksRepository;
 import com.ps.tasks.entity.Task;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -27,7 +27,8 @@ public class TasksService {
                         taskIdGenerator.getAndIncrement(),
                         title,
                         description,
-                        this.clock.time()
+                        this.clock.time(),
+                        new ArrayList<>()
                 )
         );
     }
@@ -56,5 +57,10 @@ public class TasksService {
 
     public void delete(Long id) {
         tasksRepository.delete(id);
+    }
+
+    public void addAttachmentToTask(Long id, String filename) {
+        Task task = tasksRepository.fetchById(id);
+        task.addAttachment(filename);
     }
 }
