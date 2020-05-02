@@ -1,10 +1,13 @@
 package com.ps.tasks.boundary;
 
 import com.ps.Clock;
+import com.ps.exceptions.NotFoundException;
 import com.ps.tasks.control.TasksService;
 import com.ps.tasks.entity.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -66,9 +69,19 @@ public class TasksController {
     }
 
     @PutMapping(path = "/{id}")
-    public void updateTask(@PathVariable Long id, @RequestBody UpdateTaskRequest updateTaskRequest) {
+    public ResponseEntity updateTask(@PathVariable Long id, @RequestBody UpdateTaskRequest updateTaskRequest) {
         log.info("Updating a task {}", id);
-        tasksService.updateTask(id, updateTaskRequest.title, updateTaskRequest.description);
+        try {
+            tasksService.updateTask(id, updateTaskRequest.title, updateTaskRequest.description);
+
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException exception) {
+            log.error("Failed to update", exception);
+
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(exception.getMessage());
+        }
     }
 
     private TaskResponse transformToTaskResponse(Task task) {

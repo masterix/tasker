@@ -1,5 +1,6 @@
 package com.ps.tasks.boundary;
 
+import com.ps.exceptions.NotFoundException;
 import com.ps.tasks.entity.Task;
 import org.springframework.stereotype.Component;
 
@@ -29,16 +30,17 @@ public class MemoryTasksRepository implements TasksRepository {
     @Override
     public void delete(Long id) {
         findById(id)
-                .ifPresent(task -> tasks.remove(task));
+                .ifPresent(tasks::remove);
     }
 
     @Override
     public void update(Long id, String title, String description) {
-        findById(id).ifPresent(task -> {
-            task.setTitle(title);
-            task.setDescription(description);
-        });
-    }
+        Task task = findById(id)
+                .orElseThrow(() -> new NotFoundException("Task with id not found " + id));
+
+        task.setTitle(title);
+        task.setDescription(description);
+    };
 
     private Optional<Task> findById(Long id) {
         return tasks.stream()
