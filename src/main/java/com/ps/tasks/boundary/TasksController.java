@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -35,9 +36,11 @@ public class TasksController {
     }
 
     @GetMapping
-    public List<TaskResponse> index() {
-        log.info("Fetching all tasks...");
-        return tasksRepository.fetchAll()
+    public List<TaskResponse> index(@RequestParam Optional<String> query) {
+        log.info("Fetching all tasks with filter {}", query);
+
+        return query.map(tasksService::fetchAllByQuery)
+                .orElseGet(tasksService::fetchAll)
                 .stream()
                 .map(this::transformToTaskResponse)
                 .collect(toList());
