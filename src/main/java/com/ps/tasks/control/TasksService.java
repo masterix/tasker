@@ -49,4 +49,12 @@ public class TasksService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public Task fetchById(Long id) {
+        return tasksRepository.fetchById(id);
+    }
+
+    public void delete(Long id) {
+        tasksRepository.delete(id);
+    }
 }

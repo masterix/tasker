@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,16 +24,13 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping(path = "/api/tasks")
 public class TasksController {
+
     private final StorageService storageService;
-
-    private final TasksRepository tasksRepository;
-
     private final TasksService tasksService;
 
     @Autowired
-    public TasksController(StorageService storageService, TasksRepository tasksRepository, TasksService tasksService) {
+    public TasksController(StorageService storageService, TasksService tasksService) {
         this.storageService = storageService;
-        this.tasksRepository = tasksRepository;
         this.tasksService = tasksService;
     }
 
@@ -57,26 +53,51 @@ public class TasksController {
     }
 
     @GetMapping(path = "/{id}")
-    public TaskResponse getTaskById(@PathVariable Long id) {
+    public ResponseEntity<Object> getTaskById(@PathVariable Long id) {
         log.info("Fetching task by id: {}", id);
+        try {
+            return ResponseEntity
+                    .ok()
+                    .body(transformToTaskResponse(tasksService.fetchById(id)));
+        } catch (NotFoundException exception) {
+            log.error("Failed to get task", exception);
 
-        return transformToTaskResponse(tasksRepository.fetchById(id));
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(exception.getMessage());
+        }
     }
 
     @PostMapping
-    public void addTask(@RequestBody CreateTaskRequest task) {
+    public ResponseEntity<Object> addTask(@RequestBody CreateTaskRequest task) {
         log.info("Storing new tasks {}", task);
         tasksService.addTask(task.getTitle(), task.getDescription());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteTask(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteTask(@PathVariable Long id) {
         log.info("Deleting by id: {}", id);
-        tasksRepository.delete(id);
+        try {
+            tasksService.delete(id);
+
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } catch (NotFoundException exception) {
+            log.error("Failed to delete task", exception);
+
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(exception.getMessage());
+        }
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity updateTask(@PathVariable Long id, @RequestBody UpdateTaskRequest updateTaskRequest) {
+    public ResponseEntity<Object> updateTask(@PathVariable Long id, @RequestBody UpdateTaskRequest updateTaskRequest) {
         log.info("Updating a task {}", id);
         try {
             tasksService.updateTask(id, updateTaskRequest.title, updateTaskRequest.description);
@@ -92,7 +113,7 @@ public class TasksController {
     }
 
     @GetMapping(path = "/{id}/attachments/{filename}")
-    public ResponseEntity getAttachment(
+    public ResponseEntity<Object> getAttachment(
             @PathVariable Long id,
             @PathVariable String filename,
             HttpServletRequest request
@@ -109,7 +130,7 @@ public class TasksController {
     }
 
     @PostMapping(path = "/{id}/attachments")
-    public ResponseEntity addAttachment(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<Object> addAttachment(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
         storageService.saveFile(id, file);
         return ResponseEntity.noContent().build();
     }
