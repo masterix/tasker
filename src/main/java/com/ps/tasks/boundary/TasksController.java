@@ -1,16 +1,21 @@
 package com.ps.tasks.boundary;
 
-import com.ps.Clock;
 import com.ps.exceptions.NotFoundException;
 import com.ps.tasks.control.TasksService;
 import com.ps.tasks.entity.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,13 +25,15 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping(path = "/api/tasks")
 public class TasksController {
+    private final StorageService storageService;
 
     private final TasksRepository tasksRepository;
 
     private final TasksService tasksService;
 
     @Autowired
-    public TasksController(TasksRepository tasksRepository, TasksService tasksService) {
+    public TasksController(StorageService storageService, TasksRepository tasksRepository, TasksService tasksService) {
+        this.storageService = storageService;
         this.tasksRepository = tasksRepository;
         this.tasksService = tasksService;
     }
@@ -82,6 +89,29 @@ public class TasksController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(exception.getMessage());
         }
+    }
+
+    @GetMapping(path = "/{id}/attachments/{filename}")
+    public ResponseEntity getAttachment(
+            @PathVariable Long id,
+            @PathVariable String filename,
+            HttpServletRequest request
+    ) throws IOException {
+        Resource resource = storageService.loadFile(filename);
+        String mimeType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        if (null == mimeType) {
+            mimeType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(mimeType))
+                .body(resource);
+    }
+
+    @PostMapping(path = "/{id}/attachments")
+    public ResponseEntity addAttachment(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+        storageService.saveFile(id, file);
+        return ResponseEntity.noContent().build();
     }
 
     private TaskResponse transformToTaskResponse(Task task) {
