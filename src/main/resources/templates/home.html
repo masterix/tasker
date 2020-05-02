@@ -28,9 +28,10 @@
     </tr>
     </tbody>
 </table>
-<form action="#" th:object="${newTask}" th:action="@{/tasks}" method="post">
+<form action="#" th:object="${newTask}" th:action="@{/tasks}" method="post" enctype="multipart/form-data">
     <input type="text" th:field="*{title}">
     <textarea th:field="*{description}"></textarea>
+    <input type="file" name="file">
     <button type="submit">Add</button>
 </form>
 </body>
