@@ -1,25 +1,39 @@
 package com.ps.tasks.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
-@AllArgsConstructor
+@Table("tasks")
 public class Task {
+    @Id
     private Long id;
     private String title;
     private String description;
     private LocalDateTime createdAt;
-    private List<String> attachments;
+    private Set<Attachment> attachments;
 
-    public void addAttachment(String filename) {
-        attachments.add(filename);
+    public Task(String title, String description, LocalDateTime createdAt) {
+
+        this.title = title;
+        this.description = description;
+        this.createdAt = createdAt;
     }
 
-    public List<String> getAttachments() {
-        return attachments;
+    public void addAttachment(String filename) {
+        attachments.add(new Attachment(filename));
+    }
+
+    public Set<String> getAttachments() {
+        return attachments
+                .stream()
+                .map(Attachment::getFilename)
+                .collect(Collectors.toSet());
     }
 }

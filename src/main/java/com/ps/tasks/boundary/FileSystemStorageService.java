@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -23,10 +24,10 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public String saveFile(Long taskId, MultipartFile file) throws IOException {
-        Path targetPath = path.resolve(file.getOriginalFilename());
+        Path targetPath = path.resolve(Objects.requireNonNull(file.getOriginalFilename()));
         Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-        return targetPath.toString();
+        return file.getOriginalFilename();
     }
 
     @Override

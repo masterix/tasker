@@ -3,10 +3,11 @@ package com.ps.tasks.boundary;
 import com.ps.exceptions.NotFoundException;
 import com.ps.tasks.entity.Task;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-@Component
+@Repository
 public class MemoryTasksRepository implements TasksRepository {
 
     private final Set<Task> tasks = new HashSet<>();
@@ -43,6 +44,11 @@ public class MemoryTasksRepository implements TasksRepository {
         task.setTitle(title);
         task.setDescription(description);
     };
+
+    @Override
+    public void save(Task task) {
+        tasks.add(task);
+    }
 
     private Optional<Task> findById(Long id) {
         return tasks.stream()

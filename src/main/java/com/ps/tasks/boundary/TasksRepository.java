@@ -14,4 +14,6 @@ public interface TasksRepository {
     void delete(Long id);
 
     void update(Long id, String title, String description);
+
+    void save(Task task);
 }
