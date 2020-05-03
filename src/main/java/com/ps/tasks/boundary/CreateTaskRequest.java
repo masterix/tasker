@@ -6,4 +6,5 @@ import lombok.Data;
 public class CreateTaskRequest {
     String title;
     String description;
+    String attachmentComment;
 }

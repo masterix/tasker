@@ -36,7 +36,7 @@ public class TasksViewController {
         Task task = tasksService.addTask(request.getTitle(), request.getDescription());
         if (!attachment.isEmpty()) {
             String filename = storageService.saveFile(task.getId(), attachment);
-            tasksService.addAttachmentToTask(task.getId(), filename);
+            tasksService.addAttachmentToTask(task.getId(), filename, request.getAttachmentComment());
         }
 
         return "redirect:/";

@@ -9,4 +9,5 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 public class Attachment {
     private String filename;
+    private String comment;
 }

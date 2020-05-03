@@ -48,7 +48,7 @@ public class TasksController {
         return query.map(tasksService::fetchAllByQuery)
                 .orElseGet(tasksService::fetchAll)
                 .stream()
-                .map(this::transformToTaskResponse)
+                .map(TaskResponse::from)
                 .collect(toList());
     }
 
@@ -58,7 +58,7 @@ public class TasksController {
         try {
             return ResponseEntity
                     .ok()
-                    .body(transformToTaskResponse(tasksService.fetchById(id)));
+                    .body(TaskResponse.from(tasksService.fetchById(id)));
         } catch (NotFoundException exception) {
             log.error("Failed to get task", exception);
 
@@ -113,37 +113,26 @@ public class TasksController {
     }
 
     @GetMapping(path = "/{id}/attachments/{filename}")
-    public ResponseEntity<Object> getAttachment(
+    public ResponseEntity<Optional<Resource>> getAttachment(
             @PathVariable Long id,
             @PathVariable String filename,
             HttpServletRequest request
     ) throws IOException {
-        Resource resource = storageService.loadFile(filename);
-        String mimeType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        if (null == mimeType) {
-            mimeType = "application/octet-stream";
-        }
+        Optional<Resource> resource = tasksService.loadAttachment(id, filename);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(mimeType))
                 .body(resource);
     }
 
     @PostMapping(path = "/{id}/attachments")
-    public ResponseEntity<Object> addAttachment(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<Object> addAttachment(
+            @PathVariable Long id,
+            @RequestParam("comment") String comment,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
         String filename = storageService.saveFile(id, file);
-        tasksService.addAttachmentToTask(id, filename);
+        tasksService.addAttachmentToTask(id, filename, comment);
 
         return ResponseEntity.noContent().build();
-    }
-
-    private TaskResponse transformToTaskResponse(Task task) {
-        return new TaskResponse(
-                task.getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getCreatedAt(),
-                task.getAttachments()
-        );
     }
 }

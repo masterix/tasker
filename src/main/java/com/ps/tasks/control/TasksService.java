@@ -1,21 +1,28 @@
 package com.ps.tasks.control;
 
 import com.ps.Clock;
+import com.ps.tasks.boundary.StorageService;
 import com.ps.tasks.boundary.TasksRepository;
+import com.ps.tasks.entity.Attachment;
 import com.ps.tasks.entity.Task;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class TasksService {
     private final TasksRepository tasksRepository;
     private final Clock clock;
+    private final StorageService storageService;
 
-    public TasksService(TasksRepository tasksRepository, Clock clock) {
+    public TasksService(TasksRepository tasksRepository, Clock clock, StorageService storageService) {
         this.tasksRepository = tasksRepository;
         this.clock = clock;
+        this.storageService = storageService;
     }
 
     public Task addTask(String title, String description) {
@@ -56,9 +63,19 @@ public class TasksService {
         tasksRepository.delete(id);
     }
 
-    public void addAttachmentToTask(Long id, String filename) {
+    public void addAttachmentToTask(Long id, String filename, String comment) {
         Task task = tasksRepository.fetchById(id);
-        task.addAttachment(filename);
+        task.addAttachment(filename, comment);
         tasksRepository.save(task);
+    }
+
+    public Optional<Resource> loadAttachment(Long id, String filename) throws MalformedURLException {
+        Optional<Resource> attachment = Optional.empty();
+        Task task = tasksRepository.fetchById(id);
+        if (task.getAttachments().stream().map(Attachment::getFilename).anyMatch(it -> it.equals(filename))) {
+            attachment = Optional.of(storageService.loadFile(filename));
+        }
+
+        return attachment;
     }
 }
