@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.stream.Collector;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Controller
@@ -24,7 +27,7 @@ public class TasksViewController {
 
     @GetMapping(path = "/")
     public String home(Model model) {
-        model.addAttribute("tasks", tasksService.fetchAll());
+        model.addAttribute("tasks", tasksService.fetchAll().stream().map(TaskViewResponse::from).collect(toList()));
         model.addAttribute("newTask", new CreateTaskRequest());
 
         return "home";
