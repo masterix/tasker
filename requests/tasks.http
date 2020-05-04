@@ -27,3 +27,16 @@ Content-Type: application/json
   "title": "test test",
   "description": "opis"
 }
+
+###
+
+POST localhost:9000/api/tasks/3/tags
+Content-Type: application/json
+
+{
+  "tagId": 3
+}
+
+###
+
+DELETE localhost:9000/api/tasks/3/tags/3

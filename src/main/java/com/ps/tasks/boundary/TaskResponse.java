@@ -1,7 +1,7 @@
 package com.ps.tasks.boundary;
 
+import com.ps.tags.entity.Tag;
 import com.ps.tasks.entity.Task;
-import com.sun.xml.internal.ws.api.message.Attachment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -17,17 +17,22 @@ public class TaskResponse {
     String description;
     LocalDateTime createdAt;
     Set<AttachmentResponse> attachments;
+    Set<TagResponse> tags;
 
-    static TaskResponse from(Task task) {
+    static TaskResponse from(Task task, Set<Tag> tags) {
         return new TaskResponse(
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getCreatedAt(),
                 task.getAttachments()
-                    .stream()
-                    .map(AttachmentResponse::from)
-                    .collect(Collectors.toSet())
+                        .stream()
+                        .map(AttachmentResponse::from)
+                        .collect(Collectors.toSet()),
+                tags
+                        .stream()
+                        .map(TagResponse::from)
+                        .collect(Collectors.toSet())
         );
     }
 }

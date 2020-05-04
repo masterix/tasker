@@ -1,6 +1,8 @@
 package com.ps.tasks.control;
 
 import com.ps.Clock;
+import com.ps.tags.control.TagsService;
+import com.ps.tags.entity.Tag;
 import com.ps.tasks.boundary.StorageService;
 import com.ps.tasks.boundary.TasksRepository;
 import com.ps.tasks.entity.Attachment;
@@ -18,11 +20,13 @@ public class TasksService {
     private final TasksRepository tasksRepository;
     private final Clock clock;
     private final StorageService storageService;
+    private final TagsService tagsService;
 
-    public TasksService(TasksRepository tasksRepository, Clock clock, StorageService storageService) {
+    public TasksService(TasksRepository tasksRepository, Clock clock, StorageService storageService, TagsService tagsService) {
         this.tasksRepository = tasksRepository;
         this.clock = clock;
         this.storageService = storageService;
+        this.tagsService = tagsService;
     }
 
     public Task addTask(String title, String description) {
@@ -77,5 +81,19 @@ public class TasksService {
         }
 
         return attachment;
+    }
+
+    public void addTag(Long id, Long tagId) {
+        Task task = tasksRepository.fetchById(id);
+        Tag tag = tagsService.findById(tagId);
+        task.addTag(tag);
+        tasksRepository.save(task);
+    }
+
+    public void removeTag(Long id, Long tagId) {
+        Task task = tasksRepository.fetchById(id);
+        Tag tag = tagsService.findById(tagId);
+        task.removeTag(tag);
+        tasksRepository.save(task);
     }
 }

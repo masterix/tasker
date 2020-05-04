@@ -1,7 +1,10 @@
 package com.ps.tasks.boundary;
 
 import com.ps.exceptions.NotFoundException;
+import com.ps.tags.control.TagsService;
 import com.ps.tasks.control.TasksService;
+import com.ps.tasks.entity.TagRef;
+import com.ps.tasks.entity.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -24,11 +28,13 @@ public class TasksController {
 
     private final StorageService storageService;
     private final TasksService tasksService;
+    private final TagsService tagsService;
 
     @Autowired
-    public TasksController(StorageService storageService, TasksService tasksService) {
+    public TasksController(StorageService storageService, TasksService tasksService, TagsService tagsService) {
         this.storageService = storageService;
         this.tasksService = tasksService;
+        this.tagsService = tagsService;
     }
 
     @GetMapping
@@ -38,8 +44,17 @@ public class TasksController {
         return query.map(tasksService::fetchAllByQuery)
                 .orElseGet(tasksService::fetchAll)
                 .stream()
-                .map(TaskResponse::from)
+                .map(this::toTaskResponse)
                 .collect(toList());
+    }
+
+    private TaskResponse toTaskResponse(Task task) {
+        List<Long> tagIds = task.getTagRefs()
+                .stream()
+                .map(TagRef::getTag)
+                .collect(Collectors.toList());
+
+        return TaskResponse.from(task, tagsService.findAllByIds(tagIds));
     }
 
     @GetMapping(path = "/{id}")
@@ -48,7 +63,7 @@ public class TasksController {
         try {
             return ResponseEntity
                     .ok()
-                    .body(TaskResponse.from(tasksService.fetchById(id)));
+                    .body(toTaskResponse(tasksService.fetchById(id)));
         } catch (NotFoundException exception) {
             log.error("Failed to get task", exception);
 
@@ -124,5 +139,23 @@ public class TasksController {
         tasksService.addAttachmentToTask(id, filename, comment);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/{id}/tags")
+    public ResponseEntity<Object> addTag(@PathVariable Long id, @RequestBody AddTagRequest request) {
+        tasksService.addTag(id, request.getTagId());
+
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @DeleteMapping(path = "/{id}/tags/{tagId}")
+    public ResponseEntity<Object> removeTag(@PathVariable Long id, @PathVariable Long tagId) {
+        tasksService.removeTag(id, tagId);
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }
