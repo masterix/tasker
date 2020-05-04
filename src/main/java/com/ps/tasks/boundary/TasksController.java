@@ -2,17 +2,14 @@ package com.ps.tasks.boundary;
 
 import com.ps.exceptions.NotFoundException;
 import com.ps.tasks.control.TasksService;
-import com.ps.tasks.entity.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
@@ -32,13 +29,6 @@ public class TasksController {
     public TasksController(StorageService storageService, TasksService tasksService) {
         this.storageService = storageService;
         this.tasksService = tasksService;
-    }
-
-    @PostConstruct
-    private void init() {
-        tasksService.addTask("Title 1", "desc 1");
-        tasksService.addTask("Title 2", "desc 2");
-        tasksService.addTask("Title 3", "desc 3");
     }
 
     @GetMapping
