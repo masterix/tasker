@@ -1,14 +1,23 @@
+DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS tasks;
 DROP TABLE IF EXISTS attachments;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS tags_tasks;
 
+CREATE TABLE projects
+(
+    id IDENTITY,
+    name VARCHAR(100)
+);
+
 CREATE TABLE tasks
 (
     id          IDENTITY,
+    project NUMERIC,
     title       VARCHAR(100),
     description VARCHAR,
-    created_at  TIMESTAMP
+    created_at  TIMESTAMP,
+    FOREIGN KEY (project) REFERENCES projects (id)
 );
 
 CREATE TABLE attachments
