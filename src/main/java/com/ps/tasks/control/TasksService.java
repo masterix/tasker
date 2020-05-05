@@ -49,14 +49,12 @@ public class TasksService {
         return tasksRepository.fetchAll();
     }
 
-    public List<Task> fetchAllByQuery(String query) {
-        return tasksRepository.fetchAll()
-                .stream()
-                .filter(task -> {
-                    return task.getTitle().contains(query) ||
-                            task.getDescription().contains(query);
-                })
-                .collect(Collectors.toList());
+    public List<Task> filterByTitle(String title) {
+        return tasksRepository.findByTitle(title);
+    }
+
+    public List<Task> findWithAttachments() {
+        return tasksRepository.findWithAttachments();
     }
 
     public Task fetchById(Long id) {

@@ -38,23 +38,25 @@ public class TasksController {
     }
 
     @GetMapping
-    public List<TaskResponse> index(@RequestParam Optional<String> query) {
-        log.info("Fetching all tasks with filter {}", query);
+    public ResponseEntity<List<TaskResponse>> index(@RequestParam Optional<String> title) {
+        log.info("Fetching all tasks with filter {}", title);
 
-        return query.map(tasksService::fetchAllByQuery)
-                .orElseGet(tasksService::fetchAll)
-                .stream()
-                .map(this::toTaskResponse)
-                .collect(toList());
+        return ResponseEntity
+        .ok(toTaskResponse(title.map(tasksService::filterByTitle)
+                .orElseGet(tasksService::fetchAll)));
     }
 
-    private TaskResponse toTaskResponse(Task task) {
-        List<Long> tagIds = task.getTagRefs()
-                .stream()
-                .map(TagRef::getTag)
-                .collect(Collectors.toList());
+    @GetMapping(path = "/_search")
+    public ResponseEntity<List<TaskResponse>> searchTasks(@RequestParam(defaultValue = "false") Boolean attachments) {
+        List<Task> tasks;
+        if (attachments) {
+            tasks = tasksService.findWithAttachments();
+        } else {
+            tasks = tasksService.fetchAll();
+        }
 
-        return TaskResponse.from(task, tagsService.findAllByIds(tagIds));
+        return ResponseEntity
+                .ok(toTaskResponse(tasks));
     }
 
     @GetMapping(path = "/{id}")
@@ -157,5 +159,21 @@ public class TasksController {
         return ResponseEntity
                 .noContent()
                 .build();
+    }
+
+    public List<TaskResponse> toTaskResponse(List<Task> tasks) {
+        return tasks
+                .stream()
+                .map(this::toTaskResponse)
+                .collect(toList());
+    }
+
+    private TaskResponse toTaskResponse(Task task) {
+        List<Long> tagIds = task.getTagRefs()
+                .stream()
+                .map(TagRef::getTag)
+                .collect(Collectors.toList());
+
+        return TaskResponse.from(task, tagsService.findAllByIds(tagIds));
     }
 }
