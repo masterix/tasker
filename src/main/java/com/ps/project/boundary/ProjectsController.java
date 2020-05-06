@@ -3,6 +3,7 @@ package com.ps.project.boundary;
 import com.ps.exceptions.NotFoundException;
 import com.ps.project.control.ProjectsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.relational.core.sql.Not;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,11 +64,29 @@ public class ProjectsController {
             return ResponseEntity
                     .noContent()
                     .build();
-        } catch (NotFoundException exception) {
+        } catch (NotFoundException e) {
             log.error("error while updating project");
 
             return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
+                    .notFound()
+                    .build();
+        }
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Object> deleteProject(@PathVariable Long id) {
+        log.info("Deleting project with id {}", id);
+        try {
+            projectsService.delete(id);
+
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } catch (NotFoundException e) {
+            log.error("error while deleting project");
+
+            return ResponseEntity
+                    .notFound()
                     .build();
         }
     }

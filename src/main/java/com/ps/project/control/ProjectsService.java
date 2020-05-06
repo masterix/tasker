@@ -37,4 +37,8 @@ public class ProjectsService {
         return projectsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Could not found project with id: " + id));
     }
+
+    public void delete(Long id) {
+        projectsRepository.deleteById(id);
+    }
 }

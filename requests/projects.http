@@ -17,3 +17,6 @@ Content-Type: application/json
   "name": "Test project"
 }
 
+###
+DELETE http://localhost:9000/api/projects/1
+Content-Type: application/json
