@@ -17,7 +17,7 @@ CREATE TABLE tasks
     title       VARCHAR(100),
     description VARCHAR,
     created_at  TIMESTAMP,
-    FOREIGN KEY (project) REFERENCES projects (id)
+    FOREIGN KEY (project) REFERENCES projects (id) ON DELETE CASCADE
 );
 
 CREATE TABLE attachments
