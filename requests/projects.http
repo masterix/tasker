@@ -1,0 +1,22 @@
+GET http://localhost:9000/api/projects/1
+Accept: application/json
+
+###
+PUT http://localhost:9000/api/projects/1
+Content-Type: application/json
+
+{
+  "name": "Test project 2"
+}
+
+###
+POST http://localhost:9000/api/projects
+Content-Type: application/json
+
+{
+  "name": "Test project"
+}
+
+###
+DELETE http://localhost:9000/api/projects/1
+Content-Type: application/json
