@@ -1,15 +1,16 @@
 package com.ps.project.boundary;
 
 import com.ps.project.control.ProjectsService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RestController()
 @RequestMapping(path = "/api/projects")
 public class ProjectsController {
@@ -22,9 +23,19 @@ public class ProjectsController {
     @GetMapping()
     public ResponseEntity<List<ProjectResponse>> index() {
         return ResponseEntity
-        .ok(projectsService.findAll()
-                .stream()
-                .map(p -> new ProjectResponse(p.getId(), p.getName()))
-                .collect(toList()));
+                .ok(projectsService.findAll()
+                        .stream()
+                        .map(p -> new ProjectResponse(p.getId(), p.getName()))
+                        .collect(toList()));
+    }
+
+    @PostMapping()
+    public ResponseEntity<Object> createProject(@RequestBody CreateProjectRequest createProjectRequest) {
+        log.info("Creating new project");
+        projectsService.createProject(createProjectRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 }

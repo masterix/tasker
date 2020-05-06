@@ -6,10 +6,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@AllArgsConstructor
 @Table("projects")
 public class Project {
     @Id
     private Long id;
     private String name;
+
+    public Project(String name) {
+        this.name = name;
+    }
 }

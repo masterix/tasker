@@ -1,5 +1,6 @@
 package com.ps.project.control;
 
+import com.ps.project.boundary.CreateProjectRequest;
 import com.ps.project.boundary.ProjectsCrudRepository;
 import com.ps.project.entity.Project;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,9 @@ public class ProjectsService {
         return StreamSupport
                 .stream(projectsRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    public void createProject(CreateProjectRequest createProjectRequest) {
+        projectsRepository.save(new Project(createProjectRequest.getName()));
     }
 }
