@@ -2,6 +2,7 @@ package com.ps.project.control;
 
 import com.ps.project.boundary.CreateProjectRequest;
 import com.ps.project.boundary.ProjectsCrudRepository;
+import com.ps.project.boundary.UpdateProjectRequest;
 import com.ps.project.entity.Project;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,9 @@ public class ProjectsService {
 
     public void createProject(CreateProjectRequest createProjectRequest) {
         projectsRepository.save(new Project(createProjectRequest.getName()));
+    }
+
+    public void updateProject(Long id, UpdateProjectRequest updateProjectRequest) {
+        projectsRepository.updateName(id, updateProjectRequest.getName());
     }
 }

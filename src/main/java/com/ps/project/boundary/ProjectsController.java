@@ -1,5 +1,6 @@
 package com.ps.project.boundary;
 
+import com.ps.exceptions.NotFoundException;
 import com.ps.project.control.ProjectsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,5 +38,23 @@ public class ProjectsController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<Object> updateProject(@PathVariable Long id, @RequestBody UpdateProjectRequest updateProjectRequestt) {
+        log.info("Updating project {}", id);
+        try {
+            projectsService.updateProject(id, updateProjectRequestt);
+
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } catch (NotFoundException exception) {
+            log.error("error while updating project");
+
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
     }
 }
