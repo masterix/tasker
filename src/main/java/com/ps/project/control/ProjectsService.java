@@ -1,5 +1,6 @@
 package com.ps.project.control;
 
+import com.ps.exceptions.NotFoundException;
 import com.ps.project.boundary.CreateProjectRequest;
 import com.ps.project.boundary.ProjectsCrudRepository;
 import com.ps.project.boundary.UpdateProjectRequest;
@@ -30,5 +31,10 @@ public class ProjectsService {
 
     public void updateProject(Long id, UpdateProjectRequest updateProjectRequest) {
         projectsRepository.updateName(id, updateProjectRequest.getName());
+    }
+
+    public Project findById(Long id) {
+        return projectsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Could not found project with id: " + id));
     }
 }

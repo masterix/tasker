@@ -1,3 +1,7 @@
+GET http://localhost:9000/api/projects/1
+Accept: application/json
+
+###
 PUT http://localhost:9000/api/projects/1
 Content-Type: application/json
 

@@ -30,6 +30,20 @@ public class ProjectsController {
                         .collect(toList()));
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ProjectResponse> show(@PathVariable Long id) {
+        try {
+            return ResponseEntity
+                    .ok(ProjectResponse.from(projectsService.findById(id)));
+        } catch (NotFoundException e) {
+            log.error("Could not found project with id {}", id);
+
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+    }
+
     @PostMapping()
     public ResponseEntity<Object> createProject(@RequestBody CreateProjectRequest createProjectRequest) {
         log.info("Creating new project");
