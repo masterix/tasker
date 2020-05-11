@@ -3,7 +3,6 @@ package com.ps.tasks.boundary;
 import com.ps.exceptions.NotFoundException;
 import com.ps.tags.control.TagsService;
 import com.ps.tasks.control.TasksService;
-import com.ps.tasks.entity.TagRef;
 import com.ps.tasks.entity.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -169,11 +167,6 @@ public class TasksController {
     }
 
     private TaskResponse toTaskResponse(Task task) {
-        List<Long> tagIds = task.getTagRefs()
-                .stream()
-                .map(TagRef::getTag)
-                .collect(Collectors.toList());
-
-        return TaskResponse.from(task, tagsService.findAllByIds(tagIds));
+        return TaskResponse.from(task, task.getTags());
     }
 }

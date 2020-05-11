@@ -2,10 +2,11 @@ package com.ps.tasks.entity;
 
 import com.ps.tags.entity.Tag;
 import lombok.Data;
-import org.springframework.data.relational.core.mapping.Table;
+
+import javax.persistence.Table;
 
 @Data
-@Table("tags_tasks")
+@Table(name = "tags_tasks")
 public class TagRef {
     Long tag;
 

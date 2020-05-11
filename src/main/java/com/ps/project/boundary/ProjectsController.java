@@ -3,7 +3,6 @@ package com.ps.project.boundary;
 import com.ps.exceptions.NotFoundException;
 import com.ps.project.control.ProjectsService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.relational.core.sql.Not;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -6,6 +6,10 @@ spring:
     console:
       enabled: true
 
+  jpa:
+    hibernate:
+      ddl-auto: none
+
 logging:
   level:
     org:

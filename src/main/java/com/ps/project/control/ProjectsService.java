@@ -33,7 +33,7 @@ public class ProjectsService {
         if (!projectsRepository.existsById(id)) {
             throw new NotFoundException("Could not found project with id: " + id);
         }
-        projectsRepository.updateName(id, updateProjectRequest.getName());
+//        projectsRepository.updateName(id, updateProjectRequest.getName());
     }
 
     public Project findById(Long id) {
