@@ -20,4 +20,6 @@ public interface TasksRepository {
     List<Task> findByTitle(String title);
 
     List<Task> findWithAttachments();
+
+    void addAll(Iterable<Task> tasks);
 }

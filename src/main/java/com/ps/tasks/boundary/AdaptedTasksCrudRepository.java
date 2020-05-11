@@ -59,4 +59,9 @@ public class AdaptedTasksCrudRepository implements TasksRepository {
 //        return tasksCrudRepository.findWithAttachments();
         return Collections.emptyList();
     }
+
+    @Override
+    public void addAll(Iterable<Task> tasks) {
+        tasksCrudRepository.saveAll(tasks);
+    }
 }

@@ -65,4 +65,9 @@ public class MemoryTasksRepository implements TasksRepository {
                 .filter(task -> id.equals(task.getId()))
                 .findFirst();
     }
+
+    @Override
+    public void addAll(Iterable<Task> tasks) {
+        throw new UnsupportedOperationException();
+    }
 }
