@@ -14,12 +14,9 @@ public interface TasksCrudRepository extends JpaRepository<Task, Long> {
     @Query("UPDATE Task SET title = :title, description = :description WHERE id = :id")
     void updateTitleDescription(@Param("id") Long id, @Param("title") String title, @Param("description") String description);
 
-//    @Query("SELECT * FROM Tasks t WHERE upper(t.title) LIKE '%' || upper(:title) || '%'")
-//    List<Task> findByTitle(@Param("title") String title);
-
     @Query
     List<Task> findAllByTitleLike(String title);
 
-//    @Query("SELECT * FROM Tasks t JOIN Attachments a ON t.id = a.task")
-//    List<Task> findWithAttachments();
+    @Query("FROM Task t WHERE t.attachments.size > 0")
+    List<Task> findWithAttachments();
 }

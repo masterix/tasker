@@ -56,8 +56,7 @@ public class AdaptedTasksCrudRepository implements TasksRepository {
 
     @Override
     public List<Task> findWithAttachments() {
-//        return tasksCrudRepository.findWithAttachments();
-        return Collections.emptyList();
+        return tasksCrudRepository.findWithAttachments();
     }
 
     @Override
