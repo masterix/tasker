@@ -13,6 +13,13 @@ import java.util.Set;
 @Table(name = "tasks")
 @NoArgsConstructor
 @Entity
+@NamedEntityGraph(
+        name = "Task.details",
+        attributeNodes = {
+                @NamedAttributeNode("attachments"),
+                @NamedAttributeNode("tags")
+        }
+)
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
