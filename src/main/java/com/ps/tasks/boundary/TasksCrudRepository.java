@@ -22,6 +22,8 @@ public interface TasksCrudRepository extends JpaRepository<Task, Long> {
     @EntityGraph(value = "Task.details", type = EntityGraphType.LOAD)
     List<Task> findAll();
 
+    List<TaskView> findAllBy();
+
     @Query("FROM Task t WHERE t.attachments.size > 0")
     List<Task> findWithAttachments();
 }

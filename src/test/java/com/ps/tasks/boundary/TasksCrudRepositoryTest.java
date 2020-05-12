@@ -31,4 +31,16 @@ class TasksCrudRepositoryTest {
         assertThat(tasks.get(0).getTitle()).isEqualToIgnoringCase("Buy radio");
         assertThat(tasks.get(0).getDescription()).isEqualToIgnoringCase("modern");
     }
+
+    @Test
+    public void shouldLoadView() {
+        Task task = new Task("Buy radio", "modern", clock.time());
+
+        repository.save(task);
+        List<TaskView> tasks = repository.findAllBy();
+
+        assertThat(tasks.size()).isEqualTo(1);
+        assertThat(tasks.get(0).getTitle()).isEqualToIgnoringCase("Buy radio");
+        assertThat(tasks.get(0).getDescription()).isEqualToIgnoringCase("modern");
+    }
 }
