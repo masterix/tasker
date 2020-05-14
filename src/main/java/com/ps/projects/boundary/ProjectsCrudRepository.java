@@ -1,6 +1,6 @@
-package com.ps.project.boundary;
+package com.ps.projects.boundary;
 
-import com.ps.project.entity.Project;
+import com.ps.projects.entity.Project;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.JpaRepository;

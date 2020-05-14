@@ -1,4 +1,4 @@
-package com.ps.project.boundary;
+package com.ps.projects.boundary;
 
 import lombok.Data;
 

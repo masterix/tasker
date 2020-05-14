@@ -1,4 +1,4 @@
-package com.ps.project.entity;
+package com.ps.projects.entity;
 
 import com.ps.tasks.entity.Task;
 import lombok.Data;

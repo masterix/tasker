@@ -1,7 +1,7 @@
 package com.ps;
 
-import com.ps.project.boundary.ProjectsCrudRepository;
-import com.ps.project.entity.Project;
+import com.ps.projects.boundary.ProjectsCrudRepository;
+import com.ps.projects.entity.Project;
 import com.ps.tags.boundary.TagsCrudRepository;
 import com.ps.tags.entity.Tag;
 import com.ps.tasks.boundary.TasksRepository;

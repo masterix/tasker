@@ -1,8 +1,8 @@
-package com.ps.project.control;
+package com.ps.projects.control;
 
 import com.ps.exceptions.NotFoundException;
-import com.ps.project.boundary.*;
-import com.ps.project.entity.Project;
+import com.ps.projects.boundary.*;
+import com.ps.projects.entity.Project;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

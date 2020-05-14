@@ -1,8 +1,8 @@
-package com.ps.project.boundary;
+package com.ps.projects.boundary;
 
 import com.ps.exceptions.NotFoundException;
-import com.ps.project.control.ProjectsService;
-import com.ps.project.entity.Project;
+import com.ps.projects.control.ProjectsService;
+import com.ps.projects.entity.Project;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
