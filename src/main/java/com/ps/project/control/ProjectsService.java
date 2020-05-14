@@ -1,15 +1,11 @@
 package com.ps.project.control;
 
 import com.ps.exceptions.NotFoundException;
-import com.ps.project.boundary.CreateProjectRequest;
-import com.ps.project.boundary.ProjectsCrudRepository;
-import com.ps.project.boundary.UpdateProjectRequest;
+import com.ps.project.boundary.*;
 import com.ps.project.entity.Project;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class ProjectsService {
@@ -19,10 +15,12 @@ public class ProjectsService {
         this.projectsRepository = projectsRepository;
     }
 
-    public List<Project> findAll() {
-        return StreamSupport
-                .stream(projectsRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+    public List<SimpleProjectResponse> findAll() {
+        return projectsRepository.findAllBy();
+    }
+
+    public List<Project> findAllFull() {
+        return projectsRepository.findAll();
     }
 
     public void createProject(CreateProjectRequest createProjectRequest) {

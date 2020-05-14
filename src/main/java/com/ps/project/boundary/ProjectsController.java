@@ -2,14 +2,14 @@ package com.ps.project.boundary;
 
 import com.ps.exceptions.NotFoundException;
 import com.ps.project.control.ProjectsService;
+import com.ps.project.entity.Project;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RestController()
@@ -22,12 +22,15 @@ public class ProjectsController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProjectResponse>> index() {
-        return ResponseEntity
-                .ok(projectsService.findAll()
-                        .stream()
-                        .map(p -> new ProjectResponse(p.getId(), p.getName()))
-                        .collect(toList()));
+    public ResponseEntity<List<Object>> index(@RequestParam(value = "full", required = false) boolean full) {
+        if (full) {
+            List<Project> allFull = projectsService.findAllFull();
+            return ResponseEntity
+                    .ok(new ArrayList<>(allFull));
+        } else {
+            return ResponseEntity
+                .ok(new ArrayList<>(projectsService.findAll()));
+        }
     }
 
     @GetMapping(path = "/{id}")
