@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -23,9 +25,7 @@ public class AdaptedTasksCrudRepository implements TasksRepository {
 
     @Override
     public List<Task> fetchAll() {
-        return StreamSupport
-                .stream(tasksCrudRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+        return tasksCrudRepository.findAll();
     }
 
     @Override
@@ -51,11 +51,16 @@ public class AdaptedTasksCrudRepository implements TasksRepository {
 
     @Override
     public List<Task> findByTitle(String title) {
-        return tasksCrudRepository.findByTitle(title);
+        return tasksCrudRepository.findAllByTitleLike(title);
     }
 
     @Override
     public List<Task> findWithAttachments() {
         return tasksCrudRepository.findWithAttachments();
+    }
+
+    @Override
+    public void addAll(Iterable<Task> tasks) {
+        tasksCrudRepository.saveAll(tasks);
     }
 }

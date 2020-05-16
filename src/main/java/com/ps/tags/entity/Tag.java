@@ -2,14 +2,22 @@ package com.ps.tags.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
-@Table("tags")
+@Table(name = "tags")
+@NoArgsConstructor
+@Entity
 public class Tag {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    public Tag(String name) {
+        this.name = name;
+    }
 }

@@ -1,15 +1,11 @@
-package com.ps.project.control;
+package com.ps.projects.control;
 
 import com.ps.exceptions.NotFoundException;
-import com.ps.project.boundary.CreateProjectRequest;
-import com.ps.project.boundary.ProjectsCrudRepository;
-import com.ps.project.boundary.UpdateProjectRequest;
-import com.ps.project.entity.Project;
+import com.ps.projects.boundary.*;
+import com.ps.projects.entity.Project;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class ProjectsService {
@@ -19,10 +15,12 @@ public class ProjectsService {
         this.projectsRepository = projectsRepository;
     }
 
-    public List<Project> findAll() {
-        return StreamSupport
-                .stream(projectsRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+    public List<SimpleProjectResponse> findAll() {
+        return projectsRepository.findAllBy();
+    }
+
+    public List<Project> findAllFull() {
+        return projectsRepository.findAll();
     }
 
     public void createProject(CreateProjectRequest createProjectRequest) {
@@ -33,7 +31,7 @@ public class ProjectsService {
         if (!projectsRepository.existsById(id)) {
             throw new NotFoundException("Could not found project with id: " + id);
         }
-        projectsRepository.updateName(id, updateProjectRequest.getName());
+//        projectsRepository.updateName(id, updateProjectRequest.getName());
     }
 
     public Project findById(Long id) {

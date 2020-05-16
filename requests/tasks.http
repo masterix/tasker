@@ -1,4 +1,4 @@
-POST localhost:9000/api/tasks
+POST {{api}}/tasks
 Content-Type: application/json
 
 {
@@ -8,19 +8,19 @@ Content-Type: application/json
 
 ###
 
-GET localhost:9000/api/tasks
+GET {{api}}/tasks
 
 ###
 
-GET localhost:9000/api/tasks/222
+GET {{api}}/tasks/222
 
 ###
 
-DELETE localhost:9000/api/tasks/22
+DELETE {{api}}/tasks/22
 
 ###
 
-PUT localhost:9000/api/tasks/1
+PUT {{api}}/tasks/1
 Content-Type: application/json
 
 {
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 ###
 
-POST localhost:9000/api/tasks/3/tags
+POST {{api}}/tasks/3/tags
 Content-Type: application/json
 
 {
@@ -39,4 +39,4 @@ Content-Type: application/json
 
 ###
 
-DELETE localhost:9000/api/tasks/3/tags/3
+DELETE {{api}}/tasks/3/tags/3
